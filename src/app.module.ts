@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { validate } from './config/env.validation'
+import { PrismaService } from './prisma.service'
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -10,6 +11,6 @@ import { validate } from './config/env.validation'
     isGlobal: true,
   })],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, PrismaService],
 })
 export class AppModule { }

@@ -6,7 +6,8 @@ services:
     image: postgres
     restart: always
     environment:
-      POSTGRES_PASSWORD: example
+      POSTGRES_USER: schappo
+      POSTGRES_PASSWORD: schappopass
     volumes:
       - ./pgdata:/var/lib/postgresql
     ports:
