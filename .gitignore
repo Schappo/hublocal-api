@@ -36,3 +36,6 @@ lerna-debug.log*
 
 # pgdata
 /pgdata/*
+
+# dotenv environment variables file
+.env
