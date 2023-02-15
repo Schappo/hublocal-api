@@ -25,8 +25,6 @@ export function validate(config: Record<string, unknown>) {
   const validatedConfig = plainToInstance(EnvironmentVariables, config, { enableImplicitConversion: true })
   const errors = validateSync(validatedConfig, { skipMissingProperties: false })
 
-  console.log('test', validatedConfig)
-
   if (errors.length > 0) {
     throw new Error(errors.toString())
   }
