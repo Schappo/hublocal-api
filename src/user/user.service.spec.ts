@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker'
 import { Test, TestingModule } from '@nestjs/testing'
 import { Prisma } from '@prisma/client'
-import { comparePassword } from '../helpers/encrypt.helper'
-import { randomUser } from '../helpers/faker.helper'
+import { comparePassword } from '../common/helpers/encrypt.helper'
+import { randomUser } from '../common/helpers/faker.helper'
 import { PrismaService } from '../prisma.service'
 import { UserService } from './user.service'
 

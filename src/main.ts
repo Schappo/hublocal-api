@@ -2,8 +2,8 @@ import { BadRequestException, ValidationPipe } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { HttpAdapterHost, NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
-import { EnvironmentVariables } from './config/env.validation'
-import { PrismaClientExceptionFilter } from './prisma-client-exception/prisma-client-exception.filter'
+import { EnvironmentVariables } from './common/config/env.validation'
+import { PrismaClientExceptionFilter } from './common/filters/prisma-client-exception.filter'
 import { PrismaService } from './prisma.service'
 
 

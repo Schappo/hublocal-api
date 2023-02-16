@@ -1,5 +1,5 @@
 import { IsEmail, IsString, IsStrongPassword } from "class-validator"
-import { IsRequired } from "../../validators/is-require.validator"
+import { IsRequired } from "../../common/validators/is-require.validator"
 
 
 export class CreateUserDto {
