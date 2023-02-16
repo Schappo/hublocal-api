@@ -14,4 +14,11 @@ export class UserService {
     user.password = encryptedPassword
     return await this.prisma.user.create({ data: user })
   }
+
+  async findOne(id: string): Promise<User> {
+    return await this.prisma.user.findFirst({
+      where: { id },
+    })
+  }
+
 }
