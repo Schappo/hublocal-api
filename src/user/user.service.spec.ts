@@ -52,4 +52,13 @@ describe('UserService', () => {
     })
   })
 
+  describe('find user', () => {
+    it('should find a user by id', async () => {
+      const expectedUser = { ...randomUser(), id: faker.datatype.uuid() }
+
+      jest.spyOn(prismaService.user, 'findFirst').mockResolvedValue(expectedUser)
+      expect(await service.findOne(expectedUser.id)).toEqual(expectedUser)
+    })
+  })
+
 })
