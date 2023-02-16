@@ -1,5 +1,5 @@
 import { plainToInstance, Transform } from 'class-transformer'
-import { IsEnum, IsNumber, validateSync } from 'class-validator'
+import { IsEnum, IsNumber, IsString, IsUrl, validateSync } from 'class-validator'
 
 export enum NodeEnvironment {
   Development = 'development',
@@ -14,9 +14,13 @@ export class EnvironmentVariables {
   @IsNumber()
   PORT = 3000;
 
-  // @IsString()
-  // @IsUrl({ protocols: ['postgres', 'postgresql'], require_tld: false, require_valid_protocol: false })
-  // DATABASE_URL!: string
+  @IsString()
+  @IsUrl({ protocols: ['postgres', 'postgresql'], require_tld: false, require_valid_protocol: false })
+  DATABASE_URL!: string
+
+  @Transform(({ value }) => parseInt(value, 10))
+  @IsNumber()
+  SALT: number
 }
 
 export type Env = EnvironmentVariables
