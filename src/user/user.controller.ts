@@ -1,9 +1,11 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common'
+import { Body, Controller, Get, Param, Post, UseInterceptors } from '@nestjs/common'
 import { User } from '@prisma/client'
+import { RemovePasswordFieldInterceptor } from '../common/interceptors/password-response.interceptor'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UserService } from './user.service'
 
 @Controller('user')
+@UseInterceptors(RemovePasswordFieldInterceptor)
 export class UserController {
   constructor(
     private readonly userService: UserService,
