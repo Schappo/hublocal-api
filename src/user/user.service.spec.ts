@@ -6,6 +6,7 @@ import { randomUser } from '../common/helpers/faker.helper'
 import { PrismaService } from '../prisma.service'
 import { UserService } from './user.service'
 
+
 describe('UserService', () => {
   let service: UserService
   let prismaService: PrismaService
@@ -56,8 +57,10 @@ describe('UserService', () => {
     it('should find a user by id', async () => {
       const expectedUser = { ...randomUser(), id: faker.datatype.uuid() }
 
-      jest.spyOn(prismaService.user, 'findFirst').mockResolvedValue(expectedUser)
-      expect(await service.findOne(expectedUser.id)).toEqual(expectedUser)
+      jest.spyOn(prismaService.user, 'findUnique').mockResolvedValue(expectedUser)
+
+      expect(await service.findById(expectedUser.id)).toEqual(expectedUser)
+      expect(prismaService.user.findUnique).toHaveBeenCalledWith({ where: { id: expectedUser.id } })
     })
   })
 
