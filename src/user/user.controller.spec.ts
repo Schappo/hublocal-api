@@ -69,5 +69,18 @@ describe('UserController', () => {
 
       expect(res.body).toEqual([fakeUserWithoutPassword])
     })
+
+    it('should update a user and return updated user without password', async () => {
+      const updatedName = faker.name.fullName()
+
+      jest.spyOn(userService, 'update').mockResolvedValue({ ...user, name: updatedName })
+
+      const res = await request(app.getHttpServer())
+        .put(`/user/${fakeUserInput.id}`)
+        .send({ ...fakeUserInput, name: updatedName })
+        .expect(200)
+
+      expect(res.body).toEqual({ ...fakeUserWithoutPassword, name: updatedName })
+    })
   })
 })
