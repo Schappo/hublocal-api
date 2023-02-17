@@ -3,6 +3,6 @@ import { Prisma } from "@prisma/client"
 
 export const randomUser = (): Prisma.UserCreateInput => ({
   email: faker.internet.email(),
-  name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+  name: faker.name.fullName(),
   password: faker.internet.password(),
 })
