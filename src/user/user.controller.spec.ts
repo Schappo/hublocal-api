@@ -59,5 +59,15 @@ describe('UserController', () => {
 
       expect(res.body).toEqual(fakeUserWithoutPassword)
     })
+
+    it('should find all users and return all users without password', async () => {
+      jest.spyOn(userService, 'findAll').mockResolvedValue([user])
+
+      const res = await request(app.getHttpServer())
+        .get(`/user`)
+        .expect(200)
+
+      expect(res.body).toEqual([fakeUserWithoutPassword])
+    })
   })
 })
