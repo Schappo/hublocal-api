@@ -1,24 +1,24 @@
 import { Injectable } from '@nestjs/common'
-import { Prisma, User } from '@prisma/client'
+import { User } from '@prisma/client'
+import { BaseCrudService } from '../common/base-crud.service'
 import { encryptPassword } from '../common/helpers/encrypt.helper'
+import { CreateUserDto } from './dto/create-user.dto'
+
 import { PrismaService } from '../prisma.service'
 
 @Injectable()
-export class UserService {
-  constructor(
-    private readonly prisma: PrismaService,
-  ) { }
+export class UserService extends BaseCrudService<User> {
 
-  async create(user: Prisma.UserCreateInput): Promise<User> {
+  constructor(
+    protected readonly prisma: PrismaService
+  ) {
+    super(prisma, 'user')
+  }
+
+  async create(user: CreateUserDto): Promise<User> {
     const encryptedPassword = await encryptPassword(user.password)
     user.password = encryptedPassword
     return await this.prisma.user.create({ data: user })
-  }
-
-  async findOne(id: string): Promise<User> {
-    return await this.prisma.user.findFirst({
-      where: { id },
-    })
   }
 
 }
