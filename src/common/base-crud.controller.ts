@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
+import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from '@nestjs/common'
 import { BaseCrudService } from './base-crud.service'
 
 @Controller()
@@ -24,7 +24,13 @@ export abstract class BaseCrudController<T> {
 
   @Put(':id')
   async update(@Param('id') id: string, @Body() data: Omit<T, 'id'>): Promise<T> {
-    return await this.baseService.update(id, data)
+    const resp = await this.baseService.update(id, data)
+    if (!resp) {
+      throw new NotFoundException()
+    }
+
+    return resp
+
   }
 
   @Delete(':id')

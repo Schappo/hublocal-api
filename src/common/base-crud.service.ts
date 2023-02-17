@@ -13,7 +13,7 @@ export class BaseCrudService<T> {
   }
 
   async findById(id: string): Promise<T> {
-    return await this.prisma[this.modelName].findUnique({ where: { id } })
+    return await this.prisma[this.modelName].findUniqueOrThrow({ where: { id } })
   }
 
   async create(data: Omit<T, 'id'>): Promise<T> {

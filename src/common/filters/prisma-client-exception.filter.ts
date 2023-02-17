@@ -11,8 +11,8 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
     const handleMessageResponse = (status: HttpStatus) => {
       return {
         statusCode: status,
-        target: exception.meta.target,
-        message: `${exception.meta.target} already exists`,
+        target: exception.meta?.target || {},
+        message: exception.meta?.cause ? `${exception.meta?.cause}` : `${exception.message}`,
       }
     }
 
@@ -23,14 +23,8 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
         break
       }
 
-      case 'P2003': {
-        const status = HttpStatus.NOT_FOUND
-        response.status(status).json(handleMessageResponse(status))
-        break
-      }
-
       case 'P2025': {
-        const status = HttpStatus.BAD_REQUEST
+        const status = HttpStatus.NOT_FOUND
         response.status(status).json(handleMessageResponse(status))
         break
       }
