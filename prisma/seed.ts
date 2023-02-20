@@ -1,11 +1,13 @@
 import { PrismaClient } from '@prisma/client'
-import { randomUser } from '../src/common/helpers'
+import { randomCompany, randomLocation, randomUser } from '../src/common/helpers'
 const prisma = new PrismaClient()
 async function main() {
-  const fakeUsers = [randomUser(), randomUser()]
+  const fakeUsers = [randomUser(true), randomUser(true)]
+  const fakeCompany = [randomCompany(true), randomCompany(true)]
+  const fakeLocation = [randomLocation(true), randomLocation(true)]
 
-  fakeUsers.forEach(async user => {
-    await prisma.user.upsert({
+  const usersCreated = fakeUsers.map(async user => {
+    return await prisma.user.upsert({
       where: { email: user.email },
       update: {},
       create: {
@@ -15,7 +17,34 @@ async function main() {
       },
     })
   })
+
+  const companiesCreated = fakeCompany.map(async (company, index) => {
+    return await prisma.company.create({
+      data: {
+        name: company.name,
+        cnpj: company.cnpj,
+        webSite: company.webSite,
+        userId: (await usersCreated[index]).id
+      },
+    })
+  })
+
+  fakeLocation.forEach(async (location, index) => {
+    await prisma.location.create({
+      data: {
+        name: location.name,
+        street: location.street,
+        postalCode: location.postalCode,
+        number: location.number,
+        district: location.district,
+        city: location.city,
+        state: location.state,
+        companyId: (await companiesCreated[index]).id
+      },
+    })
+  })
 }
+
 main()
   .then(async () => {
     await prisma.$disconnect()
