@@ -16,11 +16,11 @@ export class BaseCrudService<T> {
     return await this.prisma[this.modelName].findUniqueOrThrow({ where: { id } })
   }
 
-  async create(data: Omit<T, 'id'>): Promise<T> {
+  async create(data: Partial<T>): Promise<T> {
     return await this.prisma[this.modelName].create({ data })
   }
 
-  async update(id: string, data: Omit<T, 'id'>): Promise<T> {
+  async update(id: string, data: Partial<T>): Promise<T> {
     return await this.prisma[this.modelName].update({ where: { id }, data })
   }
 
