@@ -63,4 +63,12 @@ describe('CompanyService', () => {
     expect(service.update(expectedCompany.id as string, company as Company)).resolves.toEqual(expectedCompany)
     expect(prisma.company.update).toHaveBeenCalledWith({ where: { id: expectedCompany.id }, data: company })
   })
+
+  it('should delete a Company', async () => {
+    const expectedCompany = { ...randomCompany(), id: randomUUID() }
+
+    jest.spyOn(prisma.company, 'delete').mockResolvedValue(expectedCompany as Company)
+    expect(service.delete(expectedCompany.id)).resolves.toEqual(expectedCompany)
+    expect(prisma.company.delete).toHaveBeenCalledWith({ where: { id: expectedCompany.id } })
+  })
 })
