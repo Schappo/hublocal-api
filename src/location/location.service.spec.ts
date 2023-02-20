@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { Location, Prisma } from '@prisma/client'
 import { randomUUID } from 'crypto'
 import { randomLocation } from '../common/helpers'
+import { CompanyService } from '../company/company.service'
 import { PrismaService } from '../prisma.service'
 import { LocationService } from './location.service'
 
@@ -11,7 +12,7 @@ describe('LocationService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [LocationService, PrismaService],
+      providers: [LocationService, PrismaService, CompanyService],
     }).compile()
 
     service = module.get<LocationService>(LocationService)
@@ -42,6 +43,14 @@ describe('LocationService', () => {
     jest.spyOn(prisma.location, 'findUniqueOrThrow').mockResolvedValue(expectedLocation as Location)
     expect(service.findById(expectedLocation.id)).resolves.toEqual(expectedLocation)
     expect(prisma.location.findUniqueOrThrow).toHaveBeenCalledWith({ where: { id: expectedLocation.id } })
+  })
+
+  it('should find all location', async () => {
+    const expectedLocation = { ...randomLocation(), id: randomUUID() }
+
+    jest.spyOn(prisma.location, 'findMany').mockResolvedValue([expectedLocation] as Location[])
+    expect(service.findAll()).resolves.toEqual([expectedLocation])
+    expect(prisma.location.findMany).toHaveBeenCalledTimes(1)
   })
 
   it('should update a location', async () => {
