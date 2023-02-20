@@ -36,6 +36,14 @@ describe('LocationService', () => {
     expect(prisma.location.create).toHaveBeenCalledWith({ data: location })
   })
 
+  it('should find a location by id', async () => {
+    const expectedLocation = { ...randomLocation(), id: randomUUID() }
+
+    jest.spyOn(prisma.location, 'findUniqueOrThrow').mockResolvedValue(expectedLocation as Location)
+    expect(service.findById(expectedLocation.id)).resolves.toEqual(expectedLocation)
+    expect(prisma.location.findUniqueOrThrow).toHaveBeenCalledWith({ where: { id: expectedLocation.id } })
+  })
+
   it('should update a location', async () => {
     const location: Prisma.LocationUpdateInput = randomLocation({ hasCompanyId: true })
 
