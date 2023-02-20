@@ -37,6 +37,7 @@ model Location {
   name       String
   postalCode String @map("postal_code")
   street     String
+  state      String
   city       String
   number     String
   district   String
