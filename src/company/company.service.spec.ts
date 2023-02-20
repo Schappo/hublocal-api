@@ -50,4 +50,17 @@ describe('CompanyService', () => {
     expect(service.findAll()).resolves.toEqual([expectedCompany])
     expect(prisma.company.findMany).toHaveBeenCalledTimes(1)
   })
+
+  it('should update a Company', async () => {
+    const company: Prisma.CompanyUpdateInput = randomCompany({ hasCompanyId: true })
+
+    const expectedCompany = {
+      id: randomUUID(),
+      ...company
+    }
+
+    jest.spyOn(prisma.company, 'update').mockResolvedValue(expectedCompany as Company)
+    expect(service.update(expectedCompany.id as string, company as Company)).resolves.toEqual(expectedCompany)
+    expect(prisma.company.update).toHaveBeenCalledWith({ where: { id: expectedCompany.id }, data: company })
+  })
 })
