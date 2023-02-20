@@ -48,4 +48,12 @@ describe('LocationService', () => {
     expect(service.update(expectedLocation.id as string, location as Location)).resolves.toEqual(expectedLocation)
     expect(prisma.location.update).toHaveBeenCalledWith({ data: location, where: { id: expectedLocation.id } })
   })
+
+  it('should delete a location', async () => {
+    const id = randomUUID()
+
+    jest.spyOn(prisma.location, 'delete').mockResolvedValue({ id } as Location)
+    expect(service.delete(id)).resolves.toEqual({ id })
+    expect(prisma.location.delete).toHaveBeenCalledWith({ where: { id } })
+  })
 })
