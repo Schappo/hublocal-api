@@ -1,22 +1,24 @@
 import { Prisma } from "@prisma/client"
 import * as faker from "faker-br"
+import { CheckRandomHelper } from "../types"
 
-export const randomUser = (id?: boolean): Prisma.UserCreateInput => ({
-  id: id ? faker.random.uuid() : undefined,
+export const randomUser = (check?: CheckRandomHelper): Prisma.UserCreateInput => ({
+  id: check?.hasId ? faker.random.uuid() : undefined,
   email: faker.internet.email(),
   name: faker.name.firstName(),
   password: faker.internet.password(),
 })
 
-export const randomCompany = (id?: boolean): Prisma.CompanyCreateInput => ({
-  id: id ? faker.random.uuid() : undefined,
+export const randomCompany = (check?: CheckRandomHelper): Prisma.CompanyCreateInput => ({
+  id: check?.hasId ? faker.random.uuid() : undefined,
   name: faker.company.companyName(),
   cnpj: faker.br.cnpj(),
   webSite: faker.internet.url(),
+  user: check?.hasUserId ? faker.random.uuid() : undefined,
 })
 
-export const randomLocation = (id?: boolean): Prisma.LocationCreateInput => ({
-  id: id ? faker.random.uuid() : undefined,
+export const randomLocation = (check?: CheckRandomHelper): Prisma.LocationCreateInput => ({
+  id: check?.hasId ? faker.random.uuid() : undefined,
   name: faker.name.firstName(),
   street: faker.address.streetName(),
   postalCode: faker.address.zipCode(),
@@ -24,4 +26,5 @@ export const randomLocation = (id?: boolean): Prisma.LocationCreateInput => ({
   district: faker.address.county(),
   city: faker.address.city(),
   state: faker.address.state(),
+  company: check?.hasCompanyId ? faker.random.uuid() : undefined,
 })

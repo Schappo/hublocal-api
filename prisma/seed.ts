@@ -2,9 +2,9 @@ import { PrismaClient } from '@prisma/client'
 import { randomCompany, randomLocation, randomUser } from '../src/common/helpers'
 const prisma = new PrismaClient()
 async function main() {
-  const fakeUsers = [randomUser(true), randomUser(true)]
-  const fakeCompany = [randomCompany(true), randomCompany(true)]
-  const fakeLocation = [randomLocation(true), randomLocation(true)]
+  const fakeUsers = [randomUser(), randomUser()]
+  const fakeCompany = [randomCompany(), randomCompany()]
+  const fakeLocation = [randomLocation(), randomLocation()]
 
   const usersCreated = fakeUsers.map(async user => {
     return await prisma.user.upsert({
