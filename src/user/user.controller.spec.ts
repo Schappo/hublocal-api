@@ -1,6 +1,6 @@
-import { faker } from '@faker-js/faker'
 import { INestApplication } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
+import * as faker from 'faker-br'
 import * as request from 'supertest'
 import { randomUser } from '../common/helpers/faker.helper'
 import { PrismaService } from '../prisma.service'
@@ -15,7 +15,7 @@ describe('UserController', () => {
   const fakeUserInput = randomUser()
   const user = {
     ...fakeUserInput,
-    id: faker.datatype.uuid()
+    id: faker.random.uuid()
   }
   const { ['password']: remove, ...fakeUserWithoutPassword } = user
 
@@ -71,7 +71,7 @@ describe('UserController', () => {
     })
 
     it('should update a user and return updated user without password', async () => {
-      const updatedName = faker.name.fullName()
+      const updatedName = faker.name.firstName()
 
       jest.spyOn(userService, 'update').mockResolvedValue({ ...user, name: updatedName })
 
