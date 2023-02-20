@@ -1,6 +1,6 @@
-import { faker } from '@faker-js/faker'
 import { Test, TestingModule } from '@nestjs/testing'
-import { Prisma } from '@prisma/client'
+import { Prisma, User } from '@prisma/client'
+import * as faker from 'faker-br'
 import { comparePassword } from '../common/helpers/encrypt.helper'
 import { randomUser } from '../common/helpers/faker.helper'
 import { PrismaService } from '../prisma.service'
@@ -30,7 +30,7 @@ describe('UserService', () => {
     it('should create a user', async () => {
       const user: Prisma.UserCreateInput = randomUser()
       const expectedUser = {
-        id: faker.datatype.uuid(),
+        id: faker.random.uuid(),
         ...user,
       }
       jest.spyOn(prismaService.user, 'create').mockResolvedValue(expectedUser)
@@ -40,7 +40,7 @@ describe('UserService', () => {
     it('should encrypt the user password', async () => {
       const user = randomUser()
       const expectedUser = {
-        id: faker.datatype.uuid(),
+        id: faker.random.uuid(),
         ...user,
       }
 
@@ -55,7 +55,7 @@ describe('UserService', () => {
 
   describe('find user', () => {
     it('should find a user by id', async () => {
-      const expectedUser = { ...randomUser(), id: faker.datatype.uuid() }
+      const expectedUser = { ...randomUser(), id: faker.random.uuid() }
 
       jest.spyOn(prismaService.user, 'findUniqueOrThrow').mockResolvedValue(expectedUser)
 
@@ -64,7 +64,7 @@ describe('UserService', () => {
     })
 
     it('should find all user', async () => {
-      const expectedUser = () => ({ ...randomUser(), id: faker.datatype.uuid() })
+      const expectedUser = () => ({ ...randomUser(), id: faker.random.uuid() })
       const expectedUsers = [expectedUser(), expectedUser()]
       jest.spyOn(prismaService.user, 'findMany').mockResolvedValue(expectedUsers)
 
@@ -73,5 +73,14 @@ describe('UserService', () => {
     })
 
   })
+
+  it('should delete user', () => {
+    const userId = faker.random.uuid()
+    jest.spyOn(prismaService.user, 'delete').mockResolvedValue({ id: userId } as User)
+
+    expect(service.delete(userId)).resolves.toEqual({ id: userId })
+    expect(prismaService.user.delete).toHaveBeenCalledWith({ where: { id: userId } })
+  })
+
 
 })
