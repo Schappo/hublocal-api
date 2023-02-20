@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { Prisma } from '@prisma/client'
+import { Location, Prisma } from '@prisma/client'
 import { randomUUID } from 'crypto'
 import { randomLocation } from '../common/helpers'
 import { PrismaService } from '../prisma.service'
@@ -34,5 +34,18 @@ describe('LocationService', () => {
     jest.spyOn(prisma.location, 'create').mockResolvedValue(expectedLocation)
     expect(service.create(location)).resolves.toEqual(expectedLocation)
     expect(prisma.location.create).toHaveBeenCalledWith({ data: location })
+  })
+
+  it('should update a location', async () => {
+    const location: Prisma.LocationUpdateInput = randomLocation({ hasCompanyId: true })
+
+    const expectedLocation = {
+      id: randomUUID(),
+      ...location,
+    }
+
+    jest.spyOn(prisma.location, 'update').mockResolvedValue(expectedLocation as Location)
+    expect(service.update(expectedLocation.id as string, location as Location)).resolves.toEqual(expectedLocation)
+    expect(prisma.location.update).toHaveBeenCalledWith({ data: location, where: { id: expectedLocation.id } })
   })
 })
