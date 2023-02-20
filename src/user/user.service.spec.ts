@@ -82,5 +82,13 @@ describe('UserService', () => {
     expect(prismaService.user.delete).toHaveBeenCalledWith({ where: { id: userId } })
   })
 
+  it('should update user', () => {
+    const userId = faker.random.uuid()
+    const user = randomUser()
+    jest.spyOn(prismaService.user, 'update').mockResolvedValue({ id: userId, ...user } as User)
+
+    expect(service.update(userId, user)).resolves.toEqual({ id: userId, ...user })
+    expect(prismaService.user.update).toHaveBeenCalledWith({ where: { id: userId }, data: user })
+  })
 
 })
