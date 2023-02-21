@@ -61,7 +61,7 @@ describe('UserController', () => {
     })
 
     it('should find all users and return all users without password', async () => {
-      jest.spyOn(userService, 'findAll').mockResolvedValue([user])
+      jest.spyOn(userService, 'find').mockResolvedValue([user])
 
       const res = await request(app.getHttpServer())
         .get(`/user`)

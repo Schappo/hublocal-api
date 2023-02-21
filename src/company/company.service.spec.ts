@@ -47,7 +47,7 @@ describe('CompanyService', () => {
     const expectedCompany = { ...randomCompany(), id: randomUUID() }
 
     jest.spyOn(prisma.company, 'findMany').mockResolvedValue([expectedCompany] as Company[])
-    expect(service.findAll()).resolves.toEqual([expectedCompany])
+    expect(service.find({})).resolves.toEqual([expectedCompany])
     expect(prisma.company.findMany).toHaveBeenCalledTimes(1)
   })
 

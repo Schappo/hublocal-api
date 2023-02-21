@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseInterceptors } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseInterceptors } from '@nestjs/common'
 import { User } from '@prisma/client'
 import { RemoveUserPasswordFieldInterceptor } from '../common/interceptors/password-response.interceptor'
 import { CreateUserDto } from './dto/create-user.dto'
@@ -14,8 +14,8 @@ export class UserController {
 
 
   @Get()
-  async findAll(): Promise<User[]> {
-    return await this.userService.findAll()
+  async find(@Query() query: Partial<User>): Promise<User[]> {
+    return await this.userService.find(query)
   }
 
   @Get(':id')

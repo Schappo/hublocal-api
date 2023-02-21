@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common'
 import { Company } from '@prisma/client'
 import { CompanyService } from './company.service'
 import { CreateCompanyDto } from './dto/create-company.dto'
@@ -11,8 +11,8 @@ export class CompanyController {
   ) { }
 
   @Get()
-  async findAll(): Promise<Company[]> {
-    return await this.companyService.findAll()
+  async findAll(@Query() query: Partial<Company>): Promise<Company[]> {
+    return await this.companyService.find(query)
   }
 
   @Get(':id')

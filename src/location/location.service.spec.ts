@@ -49,8 +49,9 @@ describe('LocationService', () => {
     const expectedLocation = { ...randomLocation(), id: randomUUID() }
 
     jest.spyOn(prisma.location, 'findMany').mockResolvedValue([expectedLocation] as Location[])
-    expect(service.findAll()).resolves.toEqual([expectedLocation])
+    expect(service.find({ name: expectedLocation.name })).resolves.toEqual([expectedLocation])
     expect(prisma.location.findMany).toHaveBeenCalledTimes(1)
+    expect(prisma.location.findMany).toHaveBeenCalledWith({ where: { name: expectedLocation.name } })
   })
 
   it('should update a location', async () => {

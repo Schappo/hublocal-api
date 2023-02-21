@@ -8,8 +8,10 @@ export class BaseCrudService<T> {
     private readonly modelName: string
   ) { }
 
-  async findAll(): Promise<T[]> {
-    return await this.prisma[this.modelName].findMany()
+  async find(query: Partial<T>): Promise<T[]> {
+    return await this.prisma[this.modelName].findMany({
+      where: query
+    })
   }
 
   async findById(id: string): Promise<T> {

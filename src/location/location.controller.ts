@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common'
 import { Location } from '@prisma/client'
 import { CreateLocationDto } from './dto/create-location.dto'
 import { UpdateLocationDto } from './dto/update-location.dto'
@@ -11,8 +11,8 @@ export class LocationController {
   ) { }
 
   @Get()
-  async findAll(): Promise<Location[]> {
-    return await this.locationService.findAll()
+  async findAll(@Query() query: Partial<Location>): Promise<Location[]> {
+    return await this.locationService.find(query)
   }
 
   @Get(':id')

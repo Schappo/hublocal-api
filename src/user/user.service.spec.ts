@@ -65,11 +65,10 @@ describe('UserService', () => {
 
     it('should find all user', async () => {
       const expectedUser = () => ({ ...randomUser(), id: faker.random.uuid() })
-      const expectedUsers = [expectedUser(), expectedUser()]
-      jest.spyOn(prismaService.user, 'findMany').mockResolvedValue(expectedUsers)
+      const expectedUsers = [expectedUser()]
+      jest.spyOn(prismaService.user, 'findMany').mockResolvedValue([expectedUsers[0]])
 
-      expect(await service.findAll()).toEqual(expectedUsers)
-      expect(prismaService.user.findMany).toHaveBeenCalled()
+      expect(await service.find({ name: expectedUsers[0].name })).toEqual([expectedUsers[0]])
     })
 
   })
