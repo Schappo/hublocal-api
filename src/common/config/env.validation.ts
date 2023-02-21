@@ -21,6 +21,9 @@ export class EnvironmentVariables {
   @Transform(({ value }) => parseInt(value, 10))
   @IsNumber()
   SALT: number
+
+  @IsString()
+  JWT_SECRET: string
 }
 
 export type Env = EnvironmentVariables
