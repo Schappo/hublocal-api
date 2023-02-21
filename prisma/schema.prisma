@@ -26,7 +26,7 @@ model Company {
   webSite   String     @map("web_site")
   cnpj      String
   locations Location[]
-  user      User?      @relation(fields: [userId], references: [id])
+  user      User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String?    @map("user_id")
 
   @@map("companies")
@@ -42,7 +42,7 @@ model Location {
   number     String
   district   String
 
-  company   Company? @relation(fields: [companyId], references: [id])
+  company   Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
   companyId String   @map("company_id")
 
   @@map("locations")
