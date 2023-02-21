@@ -1,10 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common'
+import { AuthGuard } from '@nestjs/passport'
 import { Location } from '@prisma/client'
 import { CreateLocationDto } from './dto/create-location.dto'
 import { UpdateLocationDto } from './dto/update-location.dto'
 import { LocationService } from './location.service'
 
 @Controller('location')
+@UseGuards(AuthGuard('jwt'))
 export class LocationController {
   constructor(
     private readonly locationService: LocationService,
