@@ -1,11 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseInterceptors } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Put, Query, UseGuards, UseInterceptors } from '@nestjs/common'
+import { AuthGuard } from '@nestjs/passport'
 import { User } from '@prisma/client'
 import { RemoveUserPasswordFieldInterceptor } from '../common/interceptors/password-response.interceptor'
-import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { UserService } from './user.service'
 
 @Controller('user')
+@UseGuards(AuthGuard('jwt'))
 @UseInterceptors(RemoveUserPasswordFieldInterceptor)
 export class UserController {
   constructor(
@@ -21,11 +22,6 @@ export class UserController {
   @Get(':id')
   async findById(@Param('id') id: string): Promise<User> {
     return await this.userService.findById(id)
-  }
-
-  @Post()
-  async create(@Body() data: CreateUserDto): Promise<User> {
-    return await this.userService.create(data)
   }
 
   @Put(':id')
