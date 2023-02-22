@@ -24,7 +24,7 @@ model Company {
   id        String     @id @default(uuid())
   name      String
   webSite   String     @map("web_site")
-  cnpj      String
+  cnpj      String     @unique
   locations Location[]
   user      User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String?    @map("user_id")
