@@ -10,24 +10,27 @@ export class AuthService {
 
   async validateUser(email: string, pass: string): Promise<Omit<User, 'password'> | null> {
     const [user] = await this.userService.find({ email })
-    if (user && comparePassword(user.password, pass)) {
+    if (!user) {
+      throw new Error('User not found')
+    }
+    if (await comparePassword(pass, user.password)) {
       const { password, ...result } = user
       return result
+    } else {
+      throw new Error('Invalid credentials')
     }
-    return null
   }
 
   async login(user: Partial<User>) {
     const validatedUser = await this.validateUser(user.email, user.password)
-    if (!validatedUser) {
-      throw new Error('Invalid credentials')
-    }
+
     return {
-      access_token: this.jwtService.sign({
+      accessToken: this.jwtService.sign({
         id: validatedUser.id,
         name: validatedUser.name,
         email: validatedUser.email,
       }),
+      user: validatedUser,
     }
   }
 }
