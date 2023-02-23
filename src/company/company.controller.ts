@@ -21,7 +21,7 @@ export class CompanyController {
   }
 
   @Get('paginated')
-  async findAllC(
+  async findAllPaginated(
     @JwtPayload() user: User,
     @Query() query: QueryType<Company>,
   ): Promise<PaginatedResponse<Company>> {

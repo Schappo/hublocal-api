@@ -1,39 +1,36 @@
 import { PrismaClient } from '@prisma/client'
-import { encryptPassword, randomCompany, randomLocation, randomUser } from '../src/common/helpers'
+import { encryptPassword, randomCompany, randomLocation } from '../src/common/helpers'
 const prisma = new PrismaClient()
 async function main() {
-  const fakeUsers = [{
+  const adminUser = {
     email: 'admin@admin.com',
     name: 'Admin',
-    password: await encryptPassword('admin$1Admin')
-  }, randomUser()]
-  const fakeCompany = [randomCompany(), randomCompany()]
-  const fakeLocation = [randomLocation(), randomLocation()]
+    password: await encryptPassword('admin@1A')
+  }
 
-  const usersCreated = fakeUsers.map(async user => {
-    return await prisma.user.upsert({
-      where: { email: user.email },
-      update: {},
-      create: {
-        email: user.email,
-        name: user.name,
-        password: user.password
-      },
-    })
+  const fakeAdminCompany = Array(30).fill(null).map(() => randomCompany())
+  const fakeAdminLocation = Array(50).fill(null).map(() => randomLocation())
+
+  const adminUserCreated = await prisma.user.upsert({
+    where: { email: adminUser.email },
+    update: {},
+    create: {
+      email: adminUser.email,
+      name: adminUser.name,
+      password: adminUser.password
+    },
   })
 
-  const companiesCreated = fakeCompany.map(async (company, index) => {
-    return await prisma.company.create({
-      data: {
-        name: company.name,
-        cnpj: company.cnpj,
-        webSite: company.webSite,
-        userId: (await usersCreated[index]).id
-      },
-    })
-  })
+  const adminCompany = fakeAdminCompany.map(async (company) => await prisma.company.create({
+    data: {
+      name: company.name,
+      cnpj: company.cnpj,
+      webSite: company.webSite,
+      userId: adminUserCreated.id
+    },
+  }))
 
-  fakeLocation.forEach(async (location, index) => {
+  fakeAdminLocation.forEach(async (location) => {
     await prisma.location.create({
       data: {
         name: location.name,
@@ -43,7 +40,7 @@ async function main() {
         district: location.district,
         city: location.city,
         state: location.state,
-        companyId: (await companiesCreated[index]).id
+        companyId: (await adminCompany[Math.floor(Math.random() * 5)]).id
       },
     })
   })
