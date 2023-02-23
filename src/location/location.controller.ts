@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
 import { Location } from '@prisma/client'
+import { PaginatedResponse, QueryType } from '../common/types'
 import { CreateLocationDto } from './dto/create-location.dto'
 import { UpdateLocationDto } from './dto/update-location.dto'
 import { LocationService } from './location.service'
@@ -15,6 +16,16 @@ export class LocationController {
   @Get()
   async findAll(@Query() query: Partial<Location>): Promise<Location[]> {
     return await this.locationService.find(query)
+  }
+
+  @Get('paginated')
+  async findAllPaginated(
+    @Query() query: QueryType<Location>
+  ): Promise<PaginatedResponse<Location>> {
+    const { skip, take, ...sanitizeQuery } = query
+    const skipNum = Number(skip) || 0
+    const takeNum = Number(take) || 10
+    return await this.locationService.findPaginated(sanitizeQuery, takeNum, skipNum)
   }
 
   @Get(':id')

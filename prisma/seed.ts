@@ -2,7 +2,11 @@ import { PrismaClient } from '@prisma/client'
 import { randomCompany, randomLocation, randomUser } from '../src/common/helpers'
 const prisma = new PrismaClient()
 async function main() {
-  const fakeUsers = [randomUser(), randomUser()]
+  const fakeUsers = [{
+    email: 'admin@admin.com',
+    name: 'Admin',
+    password: 'admin$1Admin'
+  }, randomUser()]
   const fakeCompany = [randomCompany(), randomCompany()]
   const fakeLocation = [randomLocation(), randomLocation()]
 

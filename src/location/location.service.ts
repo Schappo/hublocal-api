@@ -10,4 +10,23 @@ export class LocationService extends BaseCrudService<Location> {
   ) {
     super(prisma, 'location')
   }
+
+  async findPaginated(query: Partial<Location>, take, skip) {
+    const locations = await this.prisma.location.findMany({
+      where: { ...query },
+      skip,
+      take,
+    })
+
+    const total = await this.prisma.location.count({
+      where: query,
+    })
+
+    return {
+      records: locations,
+      total,
+      skip,
+      take,
+    }
+  }
 }

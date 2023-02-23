@@ -25,11 +25,11 @@ export class CompanyController {
     @JwtPayload() user: User,
     @Query() query: QueryType<Company>,
   ): Promise<PaginatedResponse<Company>> {
-    const { skip, take, ...sanitizeQuey } = query
+    const { skip, take, ...sanitizeQuery } = query
     const skipNum = Number(skip) || 0
     const takeNum = Number(take) || 10
     return await this.companyService.findAllWithQtdLocation(
-      { ...sanitizeQuey, userId: user.id }, takeNum, skipNum)
+      { ...sanitizeQuery, userId: user.id }, takeNum, skipNum)
   }
 
   @Get(':id')
