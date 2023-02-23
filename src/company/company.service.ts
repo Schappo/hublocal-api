@@ -10,4 +10,32 @@ export class CompanyService extends BaseCrudService<Company> {
   ) {
     super(prisma, 'company')
   }
+
+  async findAllWithQtdLocation(query: Partial<Company>, take, skip) {
+    const companiesWithLocationCount = await this.prisma.company.findMany({
+      where: query,
+      skip,
+      take,
+      include: {
+        _count: {
+          select: {
+            locations: true,
+          },
+        }
+      },
+    })
+    const total = await this.prisma.company.count({
+      where: query,
+    })
+
+    return {
+      records: companiesWithLocationCount.map(({ _count, ...rest }) => ({
+        ...rest,
+        qtdLocations: _count.locations,
+      })),
+      total,
+      skip,
+      take,
+    }
+  }
 }

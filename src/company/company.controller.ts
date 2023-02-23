@@ -3,6 +3,7 @@ import { AuthGuard } from '@nestjs/passport'
 import { Company, User } from '@prisma/client'
 import { JwtPayload } from '../common/decorators/jwt-payload.decorator'
 import { CompanyGuard } from '../common/guards/company.guard'
+import { PaginatedResponse, QueryType } from '../common/types'
 import { CompanyService } from './company.service'
 import { CreateCompanyDto } from './dto/create-company.dto'
 import { UpdateCompanyDto } from './dto/update-company.dto'
@@ -17,6 +18,18 @@ export class CompanyController {
   @Get()
   async findAll(@JwtPayload() user: User, @Query() query: Partial<Company>): Promise<Company[]> {
     return await this.companyService.find({ ...query, userId: user.id })
+  }
+
+  @Get('paginated')
+  async findAllC(
+    @JwtPayload() user: User,
+    @Query() query: QueryType<Company>,
+  ): Promise<PaginatedResponse<Company>> {
+    const { skip, take, ...sanitizeQuey } = query
+    const skipNum = Number(skip) || 0
+    const takeNum = Number(take) || 10
+    return await this.companyService.findAllWithQtdLocation(
+      { ...sanitizeQuey, userId: user.id }, takeNum, skipNum)
   }
 
   @Get(':id')
