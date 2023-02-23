@@ -21,11 +21,14 @@ $ docker-compose up -d
 ### Bootstrap app script
 
 The project have ZX installed. With this library makes easy to write script in JS syntax. 
-In scripts folder have a `bootstrap-app.script.mjs` file, run it to initialize the project
+In scripts folder have a `bootstrap-app.script.mjs` file, run it to initialize the project.
+
+After installed install project and have docker engine running, go to scripts folder and run the command:
 
 ```bash
 $ zx bootstrap-app.script.mjs
 ```
+
 After you can run prisma seed to populate you database. 
 
 ```bash
